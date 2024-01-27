@@ -5,6 +5,7 @@ import RegisterAccount from "./components/RegsiterAccount";
 import HomePage from "./Pages/HomePage";
 import Footer from "./components/Footer";
 import UploadBook from "./components/UploadBook";
+import ReadBooks from "./Pages/ReadBooks";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterAccount />} />
         <Route path="/uploadBook" element={<UploadBook />} />
+        <Route path="/readBooks" element={<ReadBooks />} />
       </Routes>
       <Footer />
     </>

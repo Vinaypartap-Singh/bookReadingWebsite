@@ -1,15 +1,15 @@
-import { collection, doc, limit, onSnapshot, query } from "firebase/firestore";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import TextOnlyButton from "../utils/TextOnlyButton";
 
-export default function ShowBooks() {
+export default function ReadBooks() {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
     const bookRef = collection(db, "books");
 
-    const unsubscribe = onSnapshot(query(bookRef, limit(6)), (snapshot) => {
+    const unsubscribe = onSnapshot(bookRef, (snapshot) => {
       let documents = [];
       snapshot.forEach((doc) => {
         documents.push({ id: doc.id, ...doc.data() });
