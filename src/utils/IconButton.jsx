@@ -1,9 +1,16 @@
 import React from "react";
 
-export default function IconButton({ icon, title, onClick, outlined }) {
+export default function IconButton({
+  icon,
+  title,
+  onClick,
+  outlined,
+  disabled,
+}) {
   return (
     <button
       onClick={onClick ? onClick : null}
+      disabled={disabled ? disabled : null}
       className={`${
         outlined ? "bg-transparent border border-gray-400" : "bg-black"
       } ${

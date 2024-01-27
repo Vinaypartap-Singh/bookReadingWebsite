@@ -97,6 +97,11 @@ export default function Header() {
           {/* Buttons */}
           {currentUser ? (
             <div className="mt-20 flex justify-between">
+              <Button
+                outlined={true}
+                title={"Upload Book"}
+                onClick={navigate("/uploadBook")}
+              />
               <Button outlined={true} title={"Log Out"} onClick={logOutUser} />
             </div>
           ) : (
@@ -137,7 +142,11 @@ export default function Header() {
         {/* Buttons */}
         {currentUser ? (
           <div className="space-x-2">
-            <Button title={"Upload Book"} outlined={true} />
+            <Button
+              title={"Upload Book"}
+              outlined={true}
+              onClick={() => navigate("/uploadBook")}
+            />
             <Button title={"Log Out"} onClick={logOutUser} />
           </div>
         ) : (
