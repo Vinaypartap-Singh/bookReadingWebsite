@@ -6,6 +6,7 @@ import HomePage from "./Pages/HomePage";
 import Footer from "./components/Footer";
 import UploadBook from "./components/UploadBook";
 import ReadBooks from "./Pages/ReadBooks";
+import ProfilePage from "./Pages/ProfilePage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/register" element={<RegisterAccount />} />
         <Route path="/uploadBook" element={<UploadBook />} />
         <Route path="/readBooks" element={<ReadBooks />} />
+        <Route path="/myaccount" element={<ProfilePage />} />
       </Routes>
       <Footer />
     </>

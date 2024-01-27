@@ -5,6 +5,7 @@ import IconOnlyButton from "../utils/IconOnlyButton";
 import { useAuth } from "../context/AuthContext";
 import { auth } from "../../firebase";
 import { Link, useNavigate } from "react-router-dom";
+import TextOnlyButton from "../utils/TextOnlyButton";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -97,6 +98,11 @@ export default function Header() {
           {/* Buttons */}
           {currentUser ? (
             <div className="mt-20 flex justify-between">
+              <TextOnlyButton
+                title={"My Account"}
+                siteLink={true}
+                href={"/myaccount"}
+              />
               <Button
                 outlined={true}
                 title={"Upload Book"}
@@ -141,7 +147,12 @@ export default function Header() {
 
         {/* Buttons */}
         {currentUser ? (
-          <div className="space-x-2">
+          <div className="space-x-2 flex">
+            <TextOnlyButton
+              title={"My Account"}
+              siteLink={true}
+              href={"/myaccount"}
+            />
             <Button
               title={"Upload Book"}
               outlined={true}
