@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import IconButton from "../utils/IconButton";
 import { db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function UploadBook() {
   // required Options: Title, Author, Genre/Category, Description/Summary, Upload PDF, Cover Image, Language
@@ -14,15 +15,13 @@ export default function UploadBook() {
   const [language, setLanguage] = useState("");
   const [pdfProgress, setPdfProgress] = useState(null);
 
-  const bookInitialState = {
+  const [uploadBookInfo, setUploadBookInfo] = useState({
     title: title,
     author: author,
     genre: genre,
     description: description,
     language: language,
-  };
-
-  const [uploadBookInfo, setUploadBookInfo] = useState(bookInitialState);
+  });
 
   const options = [
     {
@@ -67,7 +66,7 @@ export default function UploadBook() {
   useEffect(() => {
     if (bookPdf === null) return;
 
-    const storageRef = ref(storage, `bookPDF/${bookPdf.name}`);
+    const storageRef = ref(storage, `bookPDF/${bookPdf.name + Date.now()}`);
     const uploadTask = uploadBytesResumable(storageRef, bookPdf);
 
     uploadTask.on(
@@ -104,6 +103,15 @@ export default function UploadBook() {
               ...prev,
               bookPdfUrl: bookDownloadUrl,
             }));
+
+            setUploadBookInfo((prev) => ({
+              ...prev,
+              title: title,
+              author: author,
+              genre: genre,
+              description: description,
+              language: language,
+            }));
           })
           .catch((error) => {
             console.log("Pdf Error", error);
@@ -115,7 +123,10 @@ export default function UploadBook() {
   useEffect(() => {
     if (coverImage === null) return;
 
-    const imageStorageRef = ref(storage, `coverImages/${coverImage.name}`);
+    const imageStorageRef = ref(
+      storage,
+      `coverImages/${coverImage.name + Date.now()}`
+    );
     const uploadCoverImage = uploadBytesResumable(imageStorageRef, coverImage);
 
     uploadCoverImage.on(
@@ -147,10 +158,19 @@ export default function UploadBook() {
       () => {
         getDownloadURL(uploadCoverImage.snapshot.ref)
           .then((downloadURL) => {
-            console.log("Image URL", downloadURL);
+            console.log("Image Uploaded");
             setUploadBookInfo((prev) => ({
               ...prev,
               coverImageURL: downloadURL,
+            }));
+
+            setUploadBookInfo((prev) => ({
+              ...prev,
+              title: title,
+              author: author,
+              genre: genre,
+              description: description,
+              language: language,
             }));
           })
           .catch((error) => {
@@ -161,7 +181,40 @@ export default function UploadBook() {
   }, [coverImage]);
 
   const getAllInfo = () => {
-    console.log(uploadBookInfo);
+    if (
+      author === "" ||
+      title === "" ||
+      genre === "" ||
+      description === "" ||
+      language === "" ||
+      bookPdf === null ||
+      coverImage === null
+    ) {
+      alert(
+        "Please fill all the details and recheck whether it's correct or not."
+      );
+    } else {
+      setUploadBookInfo((prev) => ({
+        ...prev,
+        title: title,
+        author: author,
+        genre: genre,
+        description: description,
+        language: language,
+      }));
+
+      console.log("Logged", uploadBookInfo);
+      try {
+        const bookDocRef = doc(db, "books", `${title}`);
+        setDoc(bookDocRef, {
+          uploadBookInfo,
+        });
+
+        alert("Book Uploaded Successfully.");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
