@@ -86,9 +86,9 @@ export default function Header() {
               {navItems.map(({ title, url }, index) => {
                 return (
                   <li key={index}>
-                    <a href={url} className="text-3xl">
+                    <Link to={url} className="text-3xl">
                       {title}
-                    </a>
+                    </Link>
                   </li>
                 );
               })}
@@ -100,7 +100,7 @@ export default function Header() {
               <Button
                 outlined={true}
                 title={"Upload Book"}
-                onClick={navigate("/uploadBook")}
+                onClick={() => navigate("/uploadBook")}
               />
               <Button outlined={true} title={"Log Out"} onClick={logOutUser} />
             </div>

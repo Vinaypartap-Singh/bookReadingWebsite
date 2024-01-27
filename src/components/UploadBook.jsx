@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import IconButton from "../utils/IconButton";
-import { db, storage } from "../../firebase";
+import { auth, db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -206,6 +206,19 @@ export default function UploadBook() {
       console.log("Logged", uploadBookInfo);
       try {
         const bookDocRef = doc(db, "books", `${title}`);
+        const currUserRef = doc(db, "users", `${auth.currentUser.uid}`);
+        const existingBooks = currUserRef.booksPublished || [];
+
+        existingBooks.push(uploadBookInfo);
+
+        setDoc(
+          currUserRef,
+          {
+            booksPublished: existingBooks,
+          },
+          { merge: true }
+        );
+
         setDoc(bookDocRef, {
           uploadBookInfo,
         });
